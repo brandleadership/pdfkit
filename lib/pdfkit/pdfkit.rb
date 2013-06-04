@@ -25,7 +25,7 @@ class PDFKit
     @stylesheets = []
 
     @options = PDFKit.configuration.default_options.merge(options)
-    @options.merge! find_options_in_meta(url_file_or_html) unless source.url?
+    @options.merge! find_options_in_meta(url_file_or_html)
     @options = normalize_options(@options)
 
     raise NoExecutableError.new unless File.exists?(PDFKit.configuration.wkhtmltopdf)
@@ -84,7 +84,7 @@ class PDFKit
 
     def find_options_in_meta(content)
       # Read file if content is a File
-      content = content.read if content.is_a?(File)
+      content = open(content).read
 
       found = {}
       content.scan(/<meta [^>]*>/) do |meta|
